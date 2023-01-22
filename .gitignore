@@ -1,0 +1,4 @@
+node_modules/
+backup_node_modules/
+dist/
+.tool-versions

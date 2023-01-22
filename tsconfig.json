@@ -1,0 +1,13 @@
+{
+	"extends": "@sindresorhus/tsconfig",
+	"compilerOptions": {
+		"module": "commonjs",
+		"jsx": "react",
+		"esModuleInterop": true,
+		"outDir": "dist",
+		"allowUnusedLabels": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+	},
+	"include": ["source"]
+}

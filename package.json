@@ -1,55 +1,36 @@
 {
-	"name": "CommitGPT-React-Ink",
-	"version": "0.0.0",
+	"name": "commitai",
+	"version": "1.0.0",
 	"license": "MIT",
+	"description": "CommitAI is a command line interface application that automatically generates commit messages based on the output of git diff. It utilizes the power of OpenAI's GPT-3 API to create meaningful and descriptive commit messages, making it easier to keep track of code changes. With CommitAI, you can save time and focus on writing code, rather than crafting commit messages.",
 	"bin": "dist/cli.js",
 	"engines": {
-		"node": ">=10"
+		"node": ">=14"
 	},
 	"scripts": {
 		"build": "tsc && chmod +x dist/cli.js",
-		"start": "npm run build && dist/cli.js",
-		"pretest": "npm run build",
-		"test": "xo && ava"
+		"start": "npm run build && dist/cli.js"
 	},
 	"files": [
 		"dist/cli.js"
 	],
 	"dependencies": {
 		"ink": "^3.2.0",
-		"ink-select-input": "^4.2.1",
 		"ink-spinner": "^4.0.3",
+		"ink-text-input": "^4.0.3",
 		"meow": "^9.0.0",
 		"openai": "^3.1.0",
 		"react": "^17.0.2"
 	},
-	"ava": {
-		"typescript": {
-			"extensions": [
-				"tsx"
-			],
-			"rewritePaths": {
-				"source/": "dist/"
-			}
-		}
-	},
-	"xo": {
-		"extends": "xo-react",
-		"rules": {
-			"react/prop-types": "off"
-		}
-	},
 	"devDependencies": {
-		"@ava/typescript": "^3.0.1",
 		"@sindresorhus/tsconfig": "^3.0.1",
+		"@types/node": "^18.11.18",
 		"@types/react": "^18.0.26",
-		"ava": "^5.1.1",
 		"chalk": "^4.1.2",
 		"eslint-config-xo-react": "^0.27.0",
 		"eslint-plugin-react": "^7.32.1",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"ink-testing-library": "^2.1.0",
-		"typescript": "^4.9.4",
-		"xo": "^0.39.1"
+		"typescript": "^4.9.4"
 	}
 }
