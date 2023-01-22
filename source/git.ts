@@ -1,6 +1,12 @@
 import {exec, ExecException as _4} from 'node:child_process';
 import {promisify} from 'node:util';
 
+console.log(process.env["SHELL"]);
+
+const shellString = {
+
+}
+
 const execAsync = promisify(exec);
 
 const getGitDiffOutput = async () => {
@@ -25,8 +31,13 @@ const isInGitRepository = async () => {
 	}
 };
 
-const execGitCommit = async (commitMessage: string) => {
-	const {stdout, stderr} = await execAsync(`git commit -m "${commitMessage}"`);
+const execGitCommit = async (messageArgs: string[]) => {
+	let gitCommitCommand = 'git commit';
+	// messageArgs.forEach((message) => {
+	// 	gitCommitCommand += ` -m "${message}"`;
+	// });
+
+	const {stdout, stderr} = await execAsync(gitCommitCommand);
 	if (stderr) {
 		throw new Error(stderr);
 	}
