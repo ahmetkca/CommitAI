@@ -21,6 +21,12 @@ function randomIntFromInterval(min: number, max: number) { // min and max includ
 // Summarize the changes made in the given \`git diff\` output in a clear and concise commit message that accurately reflects the modifications made to the code-base. Use best practices for writing commit messages, and be sure to follow the conventional commit format.
 
 
+interface ICommitMessage {
+	id: number;
+	subject: string;
+	body: string;
+}
+
 const generateCommitMessages = async ({
 	openai,
 	diff,
@@ -57,7 +63,7 @@ const generateCommitMessages = async ({
 			model,
 			prompt,
 			max_tokens,
-			temperature: 0.1,
+			temperature: 0.25,
 		});
 
 		console.log(response.data.choices[0]?.text);
@@ -69,7 +75,7 @@ const generateCommitMessages = async ({
 		}
 
 		try {
-			const commitMessagesJson: {commit_messages: string[]} = JSON.parse(response.data.choices[0].text);
+			const commitMessagesJson: {commit_messages: ICommitMessage[]} = JSON.parse(response.data.choices[0].text);
 			return commitMessagesJson.commit_messages;
 		} catch (e) {
 			console.log(chalk`(${maxRetries - currentRetry + 1}/${maxRetries}) {red Attempting to generate commit messages again...}`);
@@ -83,4 +89,5 @@ const generateCommitMessages = async ({
 
 export {
 	generateCommitMessages,
+	ICommitMessage,
 };
