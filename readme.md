@@ -28,11 +28,20 @@ $ yarn global add commitai
 ## Usage
 
 ```bash
+$ npx commitai [OPTIONS]
+```
+or
+```bash
 $ commitai [OPTIONS]
 ```
-or 
+
+Note: You must have a valid OpenAI API key in order to use CommitAI. You can get one [OpenAI API keys](https://beta.openai.com/account/api-keys). After you have your API key, you have to set it as an environment variable or you have to run the following command before using CommitAI:
 ```bash
-$ npx commitai [OPTIONS]
+OPENAI_API_KEY=sk-<your-api-key> commitai
+```
+or export it as an environment variable in your `.bashrc` or `.zshrc` file:
+```bash
+export OPENAI_API_KEY=sk-<your-api-key>
 ```
 
 ## Options
