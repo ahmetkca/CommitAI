@@ -1,6 +1,6 @@
 import React, {type FC, useEffect, useState} from 'react';
 import {Configuration, OpenAIApi} from 'openai';
-import {Box, Text, useApp, Spacer} from 'ink';
+import {Box, Text, useApp, Spacer, Static} from 'ink';
 import Spinner from 'ink-spinner';
 import TextInput from 'ink-text-input';
 import CommitMessages from './commit-messages';
@@ -8,6 +8,7 @@ import CommitMessages from './commit-messages';
 
 import ConfirmInput from './confirm-input';
 import chalk from 'chalk';
+import { ICommitMessage } from './openai';
 
 type CommitUIProps = {
 	edit: boolean;
@@ -15,8 +16,8 @@ type CommitUIProps = {
 	numberOfCommitMessages: number;
     isInGitRepository: () => Promise<boolean>;
     getGitDiffOutput: () => Promise<string>;
-    execGitCommit: (commitMessage: string) => Promise<string>;
-    generateCommitMessages: (options: any) => Promise<string[]>;
+    execGitCommit: (commitMessage: ICommitMessage) => Promise<string>;
+    generateCommitMessages: (options: any) => Promise<ICommitMessage[]>;
 };
 
 const CommitUI: FC<CommitUIProps> = ({
@@ -37,15 +38,15 @@ const CommitUI: FC<CommitUIProps> = ({
 
 	const [confirmCommit, setConfirmCommit] = useState<{
 		yesOrNo: boolean;
-		commitMessage?: string;
+		commitMessage?: ICommitMessage;
 		showConfirm: boolean;
 	}>({yesOrNo: true, showConfirm: false});
 
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
-	const [commitMessage, setCommitMessage] = useState<string | undefined>('');
+	const [commitMessage, setCommitMessage] = useState<ICommitMessage>();
 
-	const [commitMessages, setCommitMessages] = useState<string[]>([]);
+	const [commitMessages, setCommitMessages] = useState<ICommitMessage[]>([]);
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -106,7 +107,7 @@ const CommitUI: FC<CommitUIProps> = ({
 	}, []);
 
 	const handleRefresh = () => {
-		setCommitMessage('');
+		setCommitMessage(undefined);
 		setErrorMessage(undefined);
 		setCommitMessages([]);
 
@@ -117,25 +118,26 @@ const CommitUI: FC<CommitUIProps> = ({
 		})();
 	};
 
-	const handleSelectedCommitMessage = (message?: string) => {
-		if (message) {
+	const handleSelectedCommitMessage = (cMessage?: ICommitMessage
+		) => {
+		if (cMessage) {
 			if (!edit && confirmation) {
 				setConfirmCommit(
 					previousConfirmCommit => ({
 						...previousConfirmCommit,
-						commitMessage: message,
+						commitMessage: cMessage,
 						showConfirm: true,
 					}));
 			} else if (!edit && !confirmation) {
 				(async () => {
-					const returnValue = await execGitCommit(message);
+					const returnValue = await execGitCommit(cMessage);
 					setCommitMessages([]);
 					setCommitMessage(undefined);
 					console.log(returnValue);
 					app.exit();
 				})();
 			} else {
-				setCommitMessage(message);
+				setCommitMessage(cMessage);
 			}
 		}
 	};
@@ -152,10 +154,10 @@ const CommitUI: FC<CommitUIProps> = ({
 			<Box flexDirection='column'>
 				<Text color='red'>{errorMessage}</Text>
 				<Text>
-					<Text color='green'>
+					<Text color='greenBright'>
 						<Spinner type='dots'/>
 					</Text>
-					<Text> Generating commit messages...</Text>
+					<Text> 🤖 Generating commit messages...</Text>
 				</Text>
 			</Box>
 		);
@@ -166,7 +168,7 @@ const CommitUI: FC<CommitUIProps> = ({
 			<Box flexDirection='column'>
 				<Box flexDirection='row'>
 					<Text>git commit -m &quot;</Text>
-					<Text inverse>{confirmCommit.commitMessage}</Text>
+					<Text inverse>{confirmCommit.commitMessage.subject}</Text>
 					<Text>&quot;</Text>
 				</Box>
 				<ConfirmInput
@@ -175,12 +177,15 @@ const CommitUI: FC<CommitUIProps> = ({
 					onSubmit={(isConfirmed) => {
 						if (isConfirmed) {
 							(async () => {
-								if (!confirmCommit.commitMessage) {
+								if (!confirmCommit.commitMessage || 
+									!confirmCommit.commitMessage.subject ||
+									!confirmCommit.commitMessage.body) {
 									console.error(chalk.redBright('No commit message'));
 									return;
 								}
-
-								const returnValue = await execGitCommit(confirmCommit.commitMessage);
+								const returnValue = await execGitCommit({
+									...confirmCommit.commitMessage,
+								});
 								setConfirmCommit(previousConfirmCommit => ({
 									...previousConfirmCommit,
 									showConfirm: false,
@@ -205,7 +210,7 @@ const CommitUI: FC<CommitUIProps> = ({
 		);
 	}
 
-	if (edit && commitMessage && commitMessage.length > 0) {
+	if (edit && commitMessage && commitMessage.subject.length > 0) {
 		return (
 			<Box flexDirection='row'>
 				<Text>git commit -m "</Text>
@@ -213,14 +218,26 @@ const CommitUI: FC<CommitUIProps> = ({
 					<TextInput
 						showCursor
 						focus
-						value={commitMessage}
+						value={commitMessage.subject}
 						placeholder='Enter your commit message here'
-						onChange={setCommitMessage}
+						onChange={(val) => {
+							setCommitMessage(previousCommitMessage => {
+								if (previousCommitMessage) {
+									return {
+										...previousCommitMessage,
+										subject: val,
+									}
+								}
+								return previousCommitMessage;
+							});
+						}}
 						onSubmit={value => {
-							if (confirmation) {
+							if (confirmation && commitMessage) {
 								setConfirmCommit(previousConfirmCommit => ({
 									...previousConfirmCommit,
-									commitMessage: value,
+									commitMessage: {
+										...commitMessage,
+									},
 									showConfirm: true,
 								}));
 							} else {
@@ -230,7 +247,10 @@ const CommitUI: FC<CommitUIProps> = ({
 										return;
 									}
 
-									const returnValue = await execGitCommit(value);
+									const returnValue = await execGitCommit({
+										...commitMessage!,
+										subject: value,
+									});
 									setCommitMessage(undefined);
 									setConfirmCommit(previousConfirmCommit => ({
 										...previousConfirmCommit,
@@ -251,14 +271,34 @@ const CommitUI: FC<CommitUIProps> = ({
 
 	if (commitMessages.length > 0) {
 		return (
-			<Box flexDirection='column'>
-				<CommitMessages
-					messages={commitMessages}
-					onSelected={handleSelectedCommitMessage}
-					onRefresh={handleRefresh}/>
-				<Spacer />
-				<Box flexDirection='row' marginTop={0.5}>
-					<Text>Press Ctrl + r to refresh</Text>
+			<Box>
+				<Static
+					items={[
+						{
+							key: 'Ctrl + r',
+							prefix: 'Press',
+							suffix: 'to refresh',
+						}
+					]}
+				>
+					{({prefix, suffix, key}) => (
+						<Text key={key}>
+							<Text underline italic color={'grey'}>
+								{prefix}
+							</Text>
+							<Text color={'grey'} bold>{` ${key} `}</Text>
+							<Text underline italic color={'grey'}>
+								{suffix}
+							</Text>
+						</Text>
+					)}
+				</Static>
+				<Box flexDirection='column'>
+					
+					<CommitMessages
+						messages={commitMessages}
+						onSelected={handleSelectedCommitMessage}
+						onRefresh={handleRefresh}/>
 				</Box>
 			</Box>
 		);
