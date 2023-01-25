@@ -12,18 +12,19 @@ const cli = meow(chalk`
 	    $ commitai <options>
 
 	{underline Options}
-		--edit, -e: {grey Edit the commit message before committing}, {green default: true}
+		 --edit, -e: {grey Edit the commit message before committing}, {green default: true}
         --confirmation, -c: {grey Confirm the commit message before committing}, {green default: true}
         --numberOfCommitMessages, -n: {grey Number of commit messages to choose from}, {green default: 3}
 
 	{underline Examples}
-        $ commitai --no-e -n 4
-          1. Add ConfirmInput component
-		▶ 2.  Update ConfirmInput to handle submit and arrow keys
-          3. Refactor ConfirmInput to use React.useState
-          4. Add logic to handle onSubmit event and confirm selection with arrow/tab keys
-
-        Press \`Ctrl + r\` to refresh
+        $ commitai --no-e -n 3
+		  Press \`Ctrl + r\` to refresh
+          1. Add ConfirmInput component								  Subject:
+		▶  2.   Update ConfirmInput to handle submit and arrow keys   Update ConfirmInput to handle submit and arrow keys
+          3. Refactor ConfirmInput to use React.useState			  Body:
+		                                                              - Break up ConfirmInput into smaller components
+																	  - Uses TextInput under the hood 
+																	  - Only supports yes/no confirmation
 
         --------------------------------
 
@@ -53,7 +54,6 @@ const cli = meow(chalk`
 		},
 	},
 	inferType: true,
-	allowUnknownFlags: false,
 });
 
 render(<CommitUI
