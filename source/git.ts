@@ -1,11 +1,9 @@
 import {exec, ExecException as _4} from 'node:child_process';
 import {promisify} from 'node:util';
 
-console.log(process.env["SHELL"]);
+import fs from 'node:fs';
+import { ICommitMessage } from './openai';
 
-const shellString = {
-
-}
 
 const execAsync = promisify(exec);
 
@@ -31,13 +29,17 @@ const isInGitRepository = async () => {
 	}
 };
 
-const execGitCommit = async (messageArgs: string[]) => {
-	let gitCommitCommand = 'git commit';
-	// messageArgs.forEach((message) => {
-	// 	gitCommitCommand += ` -m "${message}"`;
-	// });
+const execGitCommit = async (commitMessage: ICommitMessage) => {
 
-	const {stdout, stderr} = await execAsync(gitCommitCommand);
+	const commitMessageToWrite = `
+${commitMessage.subject}
+
+${commitMessage.body}
+`;
+	
+	fs.writeFileSync('./.git/COMMIT_EDITMSG', commitMessageToWrite);
+
+	const {stdout, stderr} = await execAsync('git commit -F ./.git/COMMIT_EDITMSG');
 	if (stderr) {
 		throw new Error(stderr);
 	}
