@@ -82,7 +82,7 @@ Here are some best practices for writing commit messages:
 - Write clear, concise, and descriptive messages that explain the changes made in the commit.
 - Use the present tense and active voice in the message, for example, "Fix bug" instead of "Fixed bug."
 - Use the imperative mood, which gives the message a sense of command, e.g. "Add feature" instead of "Added feature"
-- Limit the subject line to 50 characters or less.
+- Limit the subject line to 72 characters or less.
 - Capitalize the subject line.
 - Do not end the subject line with a period.
 - Limit the body of the message to 256 characters or less. 
@@ -93,11 +93,11 @@ Here are some best practices for writing commit messages:
 - Why the change was necessary in the body of the message.
 - The details about what was done in the body of the message.
 - Any useful details concerning the change in the body of the message.
-- Use a hyphen (-) or asterisk (*) for the bullet points in the body of the message.
+- Use a hyphen (-) for the bullet points in the body of the message.
 
 Write ${numCommitMessages} commit messages that accurately summarizes the changes made in the given \`git diff\` output, following the best practices listed above.
 
-The format of the commit message should be as follows:
+Please provide a response in the form of a valid JSON object and do not include "Output:", "Response:" or anything similar to those two before it, in the following format:
 {
     "commit_messages": [
         {
