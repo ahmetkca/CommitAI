@@ -24,7 +24,7 @@
 		"start": "npm run build && dist/cli.js"
 	},
 	"files": [
-		"dist/cli.js"
+		"dist"
 	],
 	"dependencies": {
 		"ink": "^3.2.0",
