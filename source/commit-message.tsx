@@ -1,25 +1,26 @@
 import { Box, Text } from "ink";
 import React, { FC } from "react";
+import { ICommitMessage } from "./openai";
 
 const CommitMessage: FC<{
-    message: string; 
+    commitMessage: ICommitMessage;
     index: number; 
     isSelected: boolean
 }> = ({
-    message, 
+    commitMessage: { subject }, 
     isSelected, 
     index
 }) => (
-	<Box flexDirection='row'>
-		<Text color={'cyanBright'}>{isSelected ? '▶' : '  '}</Text><Text>{` ${index + 1}. `}</Text>
+	<Text>
+		<Text color={'cyanBright'}>{isSelected ? '▶' : ' '}</Text><Text>{` ${index + 1}. `}</Text>
 		<Text
 			bold={isSelected}
 			underline={isSelected}
 			color={isSelected ? 'green' : 'white'}
 		>
-			{message}
+			{subject}
 		</Text>
-	</Box>
+	</Text>
 );
 
 export default CommitMessage;
