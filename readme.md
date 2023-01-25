@@ -6,11 +6,12 @@ CommitAI is a command line interface application that automatically generates co
   <img width="1024" src="./demo.svg">
 </p> -->
 
-<script id="asciicast-y685nS8Qeh26ISn8gY5HF8lQK" src="https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK.js" async></script>
+<!-- <script id="asciicast-y685nS8Qeh26ISn8gY5HF8lQK" src="https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK.js" async></script> -->
 
 <!-- <video src="https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK" width="320" height="240" controls></video> -->
 
-<!-- [![asciicast](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK.svg)](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK) -->
+[![asciicast](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK.svg)](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK)
+
 
 ## Install
 
