@@ -19,12 +19,12 @@ const cli = meow(chalk`
 	{underline Examples}
         $ commitai --no-e -n 3
 		  Press \`Ctrl + r\` to refresh
-          1. Add ConfirmInput component								  Subject:
-		▶  2.   Update ConfirmInput to handle submit and arrow keys   Update ConfirmInput to handle submit and arrow keys
-          3. Refactor ConfirmInput to use React.useState			  Body:
+          1. Add ConfirmInput component			      Subject:
+		▶  2.   Update ConfirmInput to handle submit and arrow keys    Update ConfirmInput to handle submit and arrow keys
+          3. Refactor ConfirmInput to use React.useState	      Body:
 		                                                              - Break up ConfirmInput into smaller components
-																	  - Uses TextInput under the hood 
-																	  - Only supports yes/no confirmation
+									      - Uses TextInput under the hood 
+									      - Only supports yes/no confirmation
 
         --------------------------------
 
