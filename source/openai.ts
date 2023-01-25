@@ -8,10 +8,11 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 const cleanGpt3Response = (response: string) => {
-	if (response.startsWith('Output:')) {
+	response = response.trim();
+	if (response.startsWith('Output:') || response.startsWith('output:')) {
 		return response.substring('Output:'.length);
 	}
-	if (response.startsWith('Response:')) {
+	if (response.startsWith('Response:') || response.startsWith('response:')) {
 		return response.substring('Response:'.length);
 	}
 	return response;
@@ -68,12 +69,12 @@ const generateCommitMessages = async ({
 		}
 
 		try {
+			console.log(response.data.choices[0].text);
 			const gptResponse = cleanGpt3Response(response.data.choices[0].text);
+			console.log(gptResponse);
 			const commitMessagesJson: {commit_messages: ICommitMessage[]} = JSON.parse(gptResponse);
 			return commitMessagesJson.commit_messages;
 		} catch (e) {
-			fs.appendFileSync('./error.log', "\n\n\n");
-			fs.appendFileSync('./error.log', response.data.choices[0].text);
 			console.log(chalk`(${maxRetries - currentRetry + 1}/${maxRetries}) {red Attempting to generate commit messages again...}`);
 			await sleep(retryDelay);
 		}
