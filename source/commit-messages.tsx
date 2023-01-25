@@ -1,12 +1,13 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Box, useInput} from 'ink';
+import {Box, Spacer, Text, useInput} from 'ink';
 import CommitMessage from './commit-message';
+import { ICommitMessage } from './openai';
 
 
 const CommitMessages: FC<{
-	messages: string[];
-	onChange?: (messages: string[], index: number) => void;
-	onSelected?: (message?: string) => void;
+	messages: ICommitMessage[];
+	onChange?: (messages: ICommitMessage[], index: number) => void;
+	onSelected?: (message?: ICommitMessage) => void;
 	onRefresh?: () => void;
 }> = ({messages, onChange, onSelected, onRefresh}) => {
 	const [selectedMessageIndex, setSelectedMessageIndex] = useState(0);
@@ -68,16 +69,32 @@ const CommitMessages: FC<{
 	}, [messages, selectedMessageIndex]);
 
 	return (
-		<Box flexDirection='column'>
-			{messages.map((message, index) => (
-				<Box key={index + (Math.random() * message.length) + (message.at(0) ?? '')}>
-					<CommitMessage
-						message={message}
-						index={index}
-						isSelected={index === selectedMessageIndex}
-					/>
-				</Box>
-			))}
+		<Box minHeight={'40%'} flexDirection='row' alignItems='flex-start' justifyContent='flex-start'>
+
+			<Box flexDirection='column' minWidth={24} marginRight={1} justifyContent='flex-start'>
+				{messages.map((message, index) => (
+					<Text wrap="truncate-end" key={index + (Math.random() * message.subject.length) + (message.subject.at(0) ?? '')}>
+							<CommitMessage
+								
+								commitMessage={message}
+								index={index}
+								isSelected={index === selectedMessageIndex}
+							/>
+					</Text>
+				))}
+			</Box>
+			<Box flexDirection='column' minWidth={24} marginRight={1} justifyContent='flex-start'>
+				{messages.filter((_, index) => index === selectedMessageIndex).map((message,index) => {
+					return (
+						<Box key={`${index}-with-body`} flexDirection='column'>
+							<Text bold underline dimColor>Subject:</Text>
+							<Text wrap='wrap'>{message.subject}</Text>
+							<Text bold underline dimColor>Body:</Text>
+							<Text wrap='wrap'>{message.body}</Text>
+						</Box>
+					);
+				})}
+			</Box>
 		</Box>
 	);
 };
