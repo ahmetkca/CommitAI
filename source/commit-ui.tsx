@@ -186,11 +186,11 @@ const CommitUI: FC<CommitUIProps> = ({
 								const returnValue = await execGitCommit({
 									...confirmCommit.commitMessage,
 								});
+								setCommitMessage(undefined);
 								setConfirmCommit(previousConfirmCommit => ({
 									...previousConfirmCommit,
 									showConfirm: false,
 								}));
-								setCommitMessage(undefined);
 								setCommitMessages([]);
 								console.log(returnValue);
 								app.exit();
@@ -237,18 +237,19 @@ const CommitUI: FC<CommitUIProps> = ({
 									...previousConfirmCommit,
 									commitMessage: {
 										...commitMessage,
+										subject: value,
 									},
 									showConfirm: true,
 								}));
 							} else {
 								(async () => {
 									if (!value) {
-										console.error('No commit message');
+										console.error(chalk.red('No commit message provided'));
 										return;
 									}
 
 									const returnValue = await execGitCommit({
-										...commitMessage!,
+										...commitMessage,
 										subject: value,
 									});
 									setCommitMessage(undefined);
