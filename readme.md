@@ -2,6 +2,14 @@
 
 CommitAI is a command line interface application that automatically generates commit messages based on the output of git diff. It utilizes the power of OpenAI's GPT-3 API to create meaningful and descriptive commit messages, making it easier to keep track of code changes. With CommitAI, you can save time and focus on writing code, rather than crafting commit messages.
 
+<p align="center">
+  <img width="1024" src="./demo.svg">
+</p>
+
+<!-- <video src="https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK" width="320" height="240" controls></video> -->
+
+<!-- [![asciicast](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK.svg)](https://asciinema.org/a/y685nS8Qeh26ISn8gY5HF8lQK) -->
+
 ## Install
 
 ```bash
