@@ -69,9 +69,7 @@ const generateCommitMessages = async ({
 		}
 
 		try {
-			console.log(response.data.choices[0].text);
 			const gptResponse = cleanGpt3Response(response.data.choices[0].text);
-			console.log(gptResponse);
 			const commitMessagesJson: {commit_messages: ICommitMessage[]} = JSON.parse(gptResponse);
 			return commitMessagesJson.commit_messages;
 		} catch (e) {
