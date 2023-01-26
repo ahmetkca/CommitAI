@@ -12,7 +12,7 @@
 			"url": "https://www.linkedin.com/in/ahmetkca/"
 		}
 	],
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"license": "MIT",
 	"description": "CommitAI is a command line interface application that automatically generates commit messages based on the output of git diff. It utilizes the power of OpenAI's GPT-3 API to create meaningful and descriptive commit messages, making it easier to keep track of code changes. With CommitAI, you can save time and focus on writing code, rather than crafting commit messages.",
 	"bin": "dist/cli.js",
